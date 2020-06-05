@@ -26,8 +26,10 @@ public class CoordinateWindow extends JInternalFrame implements Observer {
     public void notify(Object obj) {
         try {
             var r = (Robot) obj;
+            if(r.enabled())
             textArea.setText(r.getX() + " " + r.getY());
-
+            else
+                textArea.setText("robot closed");
         } catch (Exception e) {
         }
     }

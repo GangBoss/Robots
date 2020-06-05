@@ -2,7 +2,7 @@ package gui.Robot;
 
 import gui.Observer.Observable;
 
-public class Robot implements Observable {
+public class Robot extends Observable {
 
     private volatile double m_robotPositionX = 100;
     private volatile double m_robotPositionY = 100;
@@ -13,6 +13,7 @@ public class Robot implements Observable {
 
     private static final double maxVelocity = 0.1;
     private static final double maxAngularVelocity = 0.01;
+    private boolean running =true;
 
     public void setTargetPosition(int x, int y) {
         m_targetPositionX = x;
@@ -37,6 +38,10 @@ public class Robot implements Observable {
 
     public double getDirection() {
         return m_robotDirection;
+    }
+
+    public boolean enabled(){
+        return running;
     }
 
     public void onModelUpdateEvent() {
@@ -83,6 +88,10 @@ public class Robot implements Observable {
     }
 
 
+    public void exit() {
+        running=false;
+        notifyObservers();
+    }
 }
 
 
