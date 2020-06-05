@@ -3,10 +3,15 @@ package gui;
 import log.Logger;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
 class MenuBarGenerator {
+    private JMenuItem exitItem;
 
+    public void addExitAction(ActionListener listener){
+        exitItem.addActionListener(listener);
+    }
     JMenuBar generateMenuBar(JFrame frame) {
         JMenuBar menuBar = new JMenuBar();
         JMenu exitMenu = generateExitMenu();
@@ -69,7 +74,7 @@ class MenuBarGenerator {
 
     private JMenu generateExitMenu() {
         var exitMenu = new JMenu("Файл");
-        var exitItem = new JMenuItem("выход") {
+         exitItem = new JMenuItem("выход") {
         };
 
         exitItem.addActionListener(e -> exitManager());
@@ -83,7 +88,6 @@ class MenuBarGenerator {
             SwingUtilities.updateComponentTreeUI(frame);
         } catch (ClassNotFoundException | InstantiationException
                 | IllegalAccessException | UnsupportedLookAndFeelException e) {
-            // just ignore
         }
     }
 

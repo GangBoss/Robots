@@ -1,8 +1,8 @@
-package gui;
+package gui.FrameSaver;
 
-public class SavableFrame
+public class FrameInformation
 {
-    public SavableFrame(int x, int y, int width, int height, boolean isMaximum, boolean isIcon)
+    public FrameInformation(int x, int y, int width, int height, boolean isMaximum, boolean isIcon)
     {
         this.x = x;
         this.y = y;

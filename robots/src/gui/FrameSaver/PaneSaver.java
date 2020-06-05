@@ -1,17 +1,25 @@
-package gui;
+package gui.FrameSaver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyVetoException;
 import java.io.*;
-import java.nio.file.Path;
 import java.util.HashMap;
 
-public class FrameSaver {
+public class PaneSaver {
     private static String pathToSaves = System.getProperty("user.home") + "/RobotSaves/";
 
-    public static void WriteToFile(JDesktopPane desktopPane) {
+    public PaneSaver(){
+        var saves=new File(pathToSaves);
+            if(!saves.exists())
+            try {
+                saves.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+    }
 
+    public void WriteToFile(JDesktopPane desktopPane) {
         for (var frame : desktopPane.getAllFrames()) {
             var file = new File(pathToSaves + frame.getTitle() + ".txt");
             try {
@@ -35,12 +43,11 @@ public class FrameSaver {
         }
     }
 
-    public static HashMap<String, SavableFrame> ReadFrameStates() {
-        var frameStates = new HashMap<String, SavableFrame>();
+    public HashMap<String, FrameInformation> ReadFrameStates() {
+        var frameStates = new HashMap<String, FrameInformation>();
         var file = new File(pathToSaves);
         for (var frameFile : file.listFiles()) {
             try {
-
                 var inputStream = new FileInputStream(frameFile);
                 var dataInputStream = new DataInputStream(new BufferedInputStream(inputStream));
                 var title = dataInputStream.readUTF();
@@ -50,7 +57,7 @@ public class FrameSaver {
                 var height = dataInputStream.readInt();
                 var isMaximum = dataInputStream.readBoolean();
                 var isIcon = dataInputStream.readBoolean();
-                frameStates.put(title, new SavableFrame(x, y, width, height, isMaximum, isIcon));
+                frameStates.put(title, new FrameInformation(x, y, width, height, isMaximum, isIcon));
                 dataInputStream.close();
                 inputStream.close();
             } catch (Exception e) {
@@ -60,8 +67,8 @@ public class FrameSaver {
         return frameStates;
     }
 
-    public static void ModifyDesktopPaneState(JDesktopPane desktopPane) {
-        HashMap<String, SavableFrame> frameStates = ReadFrameStates();
+    public void LoadSettings(JDesktopPane desktopPane) {
+        HashMap<String, FrameInformation> frameStates = ReadFrameStates();
         for (var frame : desktopPane.getAllFrames()) {
             if (!frameStates.containsKey(frame.getTitle()))
                 continue;
